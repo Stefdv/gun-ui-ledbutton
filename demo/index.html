@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  <script src="http://rawgit.com/amark/gun/master/gun.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>gun-ui-ledbutton</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script>
+      window.Polymer = window.Polymer || {};
+      window.Polymer.dom = 'shadow';
+    </script>
+    <link rel="import" href="../../polymer/polymer.html">
+    <link rel="import" href="../../gunui-demo-app/gunui-demo-app.html">
+    <link rel="import" href="../../gunui-demo-app/demo/demo-imports.html">
+    <link rel="import" href="../gun-ui-ledbutton.html">
+    <style is="custom-style" include="demo-shared-styles">
+          :root{ }
+          body{
+            overflow:hidden;
+          }
+       .fun {
+            @apply(--layout-horizontal);
+            @apply(--layout-center-justified);
+          }
+          .fun span {
+            font-family: 'Roboto', 'Noto', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            font-size: 16px;
+            line-height: 3;
+            text-transform: uppercase;
+          }
+           .row gun-ui-ledbutton { margin:0 10px; }
+           
+          gun-ui-ledbutton.inline {
+            --button-background-color:transparent;
+            height: 10px;
+            margin: 12px 5px;
+            display: inline-block;
+          }
+          [led-button] {
+            width:30px;
+            height:30px;
+          }
+          iframe {
+            @apply(--layout-vertical);
+            height:80vh;
+            width: 100%;
+            border:0;
+            overflow:hidden;
+          }
+          
+    </style>
+  </head>
+  <body>
+  <prism-highlighter></prism-highlighter>
+  <template is="dom-bind" id="app">
+    <style is="custom-style" include="demo-shared-styles">
+      .row gun-ui-ledbutton { margin:0 10px; }
+           
+          gun-ui-ledbutton.inline {
+            --button-background-color:transparent;
+            height: 10px;
+            margin: 12px 5px;
+            display: inline-block;
+          }
+          [led-button] {
+            width:30px;
+            height:30px;
+          } 
+
+    </style>
+    <gunui-demo-app selected="">
+      <style is="custom-style">
+
+      </style>
+      <!-- create page -->
+        <div class="vertical-section centered" id="start">
+        <h3>What it does</h3>
+        <p>Well... take a look at the title..<br>
+        The 'GUN-UI-LEDBUTTON' part of the title is a 'gun-ui-ledbutton' with attribute 'button', the <gun-ui-ledbutton class="inline" soul="demo" prop="O" subscribe></gun-ui-ledbutton>'s are gun-ui-booleans with the 'subscibe' attribute.<br>All elements have the same 'soul' and 'prop' attributes <prism-demo inline code='<gun-ui-ledbutton soul="demo" prop="O">' lang="html"></prism-demo>.<br>If you press the 'GUN-UI' button in the title you will see the <gun-ui-ledbutton class="inline" soul="demo" prop="O"  subscribe></gun-ui-ledbutton>'s turn on/off.</p>
+
+        <blockquote>
+           By setting the attributes 'soul' and 'prop' you're linking the element to thát part of your data.<br>
+         </blockquote>
+
+        <blockquote>
+          'Extra attributes' mean attributes beside 'soul' and 'prop' since these are mandatory!
+        </blockquote>
+      </div>
+
+
+      </gunui-demo-app>
+    </template>
+    <script>
+      var app = document.querySelector('#app');
+    </script>
+  </body>
+</html>

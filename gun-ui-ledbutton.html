@@ -1,0 +1,258 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../gun-ui-mixin/gun-ui-mixin.html">
+<link rel="import" href="../gun-ui-led/gun-ui-led.html">
+
+<!--
+`gun-ui-ledbutton`
+
+
+@demo demo/index.html 
+-->
+
+<dom-module id="gun-ui-ledbutton">
+  <template>
+    <style include="iron-flex iron-flex-alignment">
+      :host {
+        display: block;
+       
+      }
+     
+      paper-button {
+        text-align: center;
+        vertical-align: middle;
+        min-width: 100%;
+        min-height: 100%;
+        
+      }
+      paper-button,
+      .solo {
+        background: var(--button-background);
+         border-radius: var(--button-border-radius,3px);
+      
+      }
+
+      gun-ui-led {
+        margin: 0px 0 0 0px;
+      }
+
+      .row { 
+        @apply(--layout-flex);
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        @apply(--layout-center-justified);
+      }
+
+      .label {
+        @apply(--layout-flex);
+      }
+     
+      .solo {
+        @apply(--layout-inline);
+        @apply(--layout-center-justified);
+        @apply(--layout-center);
+        position: relative;
+        box-sizing: border-box;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        z-index: 0;
+      }
+
+      .plain{
+        box-shadow: 0px 0px 0px 1px lightgrey;
+        box-sizing:border-box;
+        border-radius: 6px;
+      }
+
+      .ledBtn > gun-ui-led {
+        margin:0;
+      }
+
+      .ledBtn,
+      .solo {
+       
+        border-radius: var(--button-border-radius,3px);
+      }
+    </style>
+
+
+
+
+<template is="dom-if" if="{{_isButton(button,ledButton)}}">
+  <paper-button noink="[[noink]]" hidden$="[[!prop]]" raised="[[raised]]" toggles active="{{active}}" on-tap="_userAction" class$="{{_getClass(ledButton,raised)}}" disabled$="[[disabled]]">
+
+    <template is="dom-if" if="{{suffix}}">
+      <span hidden$="{{ledButton}}" style="margin: 0 10px;">[[label]]</span>
+    </template>
+    <template is="dom-if" if="{{_checkLed(led,ledButton)}}">
+      <gun-ui-led id="led" color="[[color]]" active="[[active]]" blink="[[blink]]"></gun-ui-led>
+    </template>
+     <template is="dom-if" if="{{!suffix}}">
+      <span hidden$="{{ledButton}}" style="margin: 0 10px;">[[label]]</span>
+    </template>
+  </paper-button>
+</template>
+<template is="dom-if" if="{{!_isButton(button,ledButton,label)}}">
+    <div class="solo">
+       <gun-ui-led id="sololed" color="[[color]]" active="[[active]]" blink="[[blink]]"></gun-ui-led>
+    </div>
+</template>
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'gun-ui-ledbutton',
+
+      properties: {
+        active         : { type:Boolean, value:false    },
+        button         : { type:Boolean, value:false    },
+        ledButton      : { type:Boolean, value:false    },
+        label          : { type:String,  value:null     },
+        led            : { type:Boolean, value:false    },
+        color          : { type:String,  value:'red'    },
+        colorOn        : { type:String,  value:'green'  },
+        colorOff       : { type:String,  value:'null'   },
+        colorFail      : { type:String,  value:'red'    },
+        colorStandby   : { type:String,  value:'yellow'    },
+        activeColor    : { type:String,  value:'green'  },
+        _color         : { type:String,  value:'orange' },
+        _colorOverRide : { type:Boolean, value:false    }, 
+        _fromGun       : { type:Boolean, value:false    },
+        suffix         : { type:Boolean, value:false    },
+        disabled       : { type:Boolean, value:false    },
+        raised         : { type:Boolean, value:false    },
+        noink          : { type:Boolean, value:false    },
+        state          : { type: String, reflectToAttribute:true, observer:'_stateChanged', notify:true},
+        blink          : { type:Boolean, value:false}
+      },
+      behaviors: [Polymer.GunUiMixin],
+
+      _getClass: function(ledButton,raised) {
+        var clss = ledButton ? 'ledBtn' : null;
+        clss = raised ? clss : clss + ' plain'
+        return clss
+      },
+      _isButton:function(button,ledButton){
+        return this.button || this.ledButton ? true :false;
+      },
+      _checkLabelOnly:function(label,button,ledButton,led){
+        return (label && (!button && !ledButton &&! led))
+      },
+      _checkLed(led,ledButton){
+        return (led || ledButton) ? true : false
+      },
+      // inititial
+      ready: function() {
+        this.led = this.ledButton ? true : this.led; 
+        this.subscribe ? this._subscribe() : this.getCurrentState();
+      },
+      _subscribe:function(){
+        this._on(this.soul,this.prop,(val) => {
+            this._fromGun=true;
+            this._toggleState(val)
+        })
+
+      },
+      getCurrentState:function(){
+        
+        this._read({soul:this.soul,prop:this.prop})
+            .then((value) => {
+              this._toggleState(value)
+            })     
+      },
+ 
+      // 'on','off','fail','standby'
+      setState: function(state) {
+        if(state){
+          this.restoreState = this.state;
+          this.state = state;
+          this._fromGun = false;
+          this._toggleState(state);
+        }
+      },
+      setBlink(){
+        this.blink = !this.blink
+      },
+    
+    
+      /* set led-color from outside 
+         will NOT be SAVED
+      */
+      setColor: function(color) {
+        // preserve original color
+        this.restoreColor = this.color
+        this._colorOverRide = true
+        this.color = color == 'unk' ? null : color
+      },
+      resetColor: function() {
+        this.color = this.restoreColor ? this.restoreColor : this.color
+        this._colorOverRide = false
+      },
+      /* user pressed the button 
+        NOTE: pressing the button can only set the state to 'on' or 'off' since this is a boolean.
+        However, other states can be set through 'setState' or due to external situations
+      */
+      _userAction: function(e) {
+        e.stopPropagation();
+        this._fromGun = false;
+        this.state = this.active ? 'on' : 'off'; // triggers _stateChanged -> toggleState
+       // this._toggleState(this.state)
+       
+      },
+      /**
+       * due to user action
+       */
+      _stateChanged: function(newState,oldState) {
+        this.restoreState = oldState;
+        this._fromGun = false;
+        this._toggleState(newState);
+      },
+       _toggleState: function(state) {
+        switch(state) {
+          case 'on'      : this.active = true;
+                           this.color = this.colorOn;
+                           break;
+          case 'off'     : this.active = false;
+                           this.color = this.colorOff;
+                           break;
+          case 'fail'    : this.active = true;
+                            this.color = this.colorFail;
+
+                           break;
+          case 'standby' : this.active = true;
+                            this.color=this.colorStandby;
+                           break;
+          case 'restore' : this._toggleState(this.restoreState);
+                         
+        }
+        if(!this._fromGun && this._isButton()) {
+         this._update({soul:this.soul,prop:this.prop,data:this.state});
+        } 
+      },
+
+      blink(){
+        this.$.led.blink()
+      },
+      /**
+       * When using gun-ui-signals this will be triggered
+       */
+      _handleStateChange:function(e,detail){
+
+        if( (detail.soul === this.soul || detail.soul == this.soul)){
+          if(this.prop==detail.prop || this.prop == detail.soul + '.' + detail.prop) {
+            //console.log(detail)
+           //console.log('%s received "%s" change from %s.%s',this.soul,this.prop,detail.soul,detail.prop)
+          this._fromGun = true;
+          this._toggleState(detail.value)
+          }
+        
+        }
+      }
+    });
+  </script>
+</dom-module>
