@@ -33,7 +33,7 @@
           
 
     </style>
-    <gunui-demo-app selected="">
+    <gunui-demo-app>
       <style is="custom-style">
         .fun {
           @apply(--layout-horizontal);
@@ -83,7 +83,24 @@
             color: #690;
             font-family: monospace;
           }
-
+          .wood {
+            background: -moz-linear-gradient(left, #e9dfc4 0%, #e9dfc4 1%, #ede3c8 2%, #ede3c8 24%, #ebddc3 25%, #e9dfc4 48%, #ebddc3 49%, #e6d8bd 52%, #e6d8bd 53%, #e9dbc0 54%, #e6d8bd 55%, #e6d8bd 56%, #e9dbc0 57%, #e6d8bd 58%, #e6d8bd 73%, #e9dbc0 74%, #e9dbc0 98%, #ebddc3 100%);
+          background: -webkit-gradient(linear, left top, right top, color-stop(0%, #e9dfc4), color-stop(1%, #e9dfc4), color-stop(2%, #ede3c8), color-stop(24%, #ede3c8), color-stop(25%, #ebddc3), color-stop(48%, #e9dfc4), color-stop(49%, #ebddc3), color-stop(52%, #e6d8bd), color-stop(53%, #e6d8bd), color-stop(54%, #e9dbc0), color-stop(55%, #e6d8bd), color-stop(56%, #e6d8bd), color-stop(57%, #e9dbc0), color-stop(58%, #e6d8bd), color-stop(73%, #e6d8bd), color-stop(74%, #e9dbc0), color-stop(98%, #e9dbc0), color-stop(100%, #ebddc3));
+          background: -webkit-linear-gradient(left, #e9dfc4 0%, #e9dfc4 1%, #ede3c8 2%, #ede3c8 24%, #ebddc3 25%, #e9dfc4 48%, #ebddc3 49%, #e6d8bd 52%, #e6d8bd 53%, #e9dbc0 54%, #e6d8bd 55%, #e6d8bd 56%, #e9dbc0 57%, #e6d8bd 58%, #e6d8bd 73%, #e9dbc0 74%, #e9dbc0 98%, #ebddc3 100%);
+          background: -o-linear-gradient(left, #e9dfc4 0%, #e9dfc4 1%, #ede3c8 2%, #ede3c8 24%, #ebddc3 25%, #e9dfc4 48%, #ebddc3 49%, #e6d8bd 52%, #e6d8bd 53%, #e9dbc0 54%, #e6d8bd 55%, #e6d8bd 56%, #e9dbc0 57%, #e6d8bd 58%, #e6d8bd 73%, #e9dbc0 74%, #e9dbc0 98%, #ebddc3 100%);
+          background: -ms-linear-gradient(left, #e9dfc4 0%, #e9dfc4 1%, #ede3c8 2%, #ede3c8 24%, #ebddc3 25%, #e9dfc4 48%, #ebddc3 49%, #e6d8bd 52%, #e6d8bd 53%, #e9dbc0 54%, #e6d8bd 55%, #e6d8bd 56%, #e9dbc0 57%, #e6d8bd 58%, #e6d8bd 73%, #e9dbc0 74%, #e9dbc0 98%, #ebddc3 100%);
+          background: linear-gradient(to right, #e9dfc4 0%, #e9dfc4 1%, #ede3c8 2%, #ede3c8 24%, #ebddc3 25%, #e9dfc4 48%, #ebddc3 49%, #e6d8bd 52%, #e6d8bd 53%, #e9dbc0 54%, #e6d8bd 55%, #e6d8bd 56%, #e9dbc0 57%, #e6d8bd 58%, #e6d8bd 73%, #e9dbc0 74%, #e9dbc0 98%, #ebddc3 100%);
+          background-size: 120px;
+          background-repeat: repeat;
+          }
+          .wood gun-ui-ledbutton {
+            --button-background:transparant;
+            --button-border-radius:0;
+            --led-size:24px;
+            --button-shadow:none;
+            width:40px;height:40px;
+          }
+       
           
       </style>
       <!-- create page -->
@@ -172,6 +189,7 @@
           .big {
             --led-size:20px;
             --button-border-radius:25%;
+            --button-shadow:none;
             width:60px;
             height:60px;
           }
@@ -227,8 +245,8 @@
           <div class="demo-header">
             <p>The big button will go from 'off' &rArr; 'standby' &rArr; 'on' &rArr; 'standby' &rArr; 'off' <br>
             The right button is just a 'on/off' button.</p>
-            <p>If you press the big button, the smaller one will nicely follow the 3 states ( external states remember), if you press the small button the big one will only be turned 'on' or 'off' ( it never receives a third state)</p>
-            <p>Now set the big button in 'standby' ( yellow )...now try the smaller one...right, it doesn't work because an 'on/off' button is not allowed to change external states.</p>
+            <p>If you press the big button, the smaller one will nicely follow the 3 states ( external states remember), if you press the small button - when the big one is green or off - the big one will only be turned 'on' or 'off' ( it never receives a third state)</p>
+            <p>Now set the big button in 'standby' ( yellow ) and try the smaller one...right, it doesn't work because an 'on/off' button is not allowed to change external states.</p>
            
           </div>
           <template>
@@ -241,6 +259,49 @@
 
       </div>
 
+      <div class="vertical-section centered" id="led-color">
+      <h3>Cycle</h3>
+
+      <p>Another one born out of necessity...<span class="attribute">cycle</span>. Part of the gun-ui-ledbutton is a supporting element <prism-demo inline code="<gun-ui-led>"></prism-demo></p>
+      <blockquote>
+        <prism-demo inline code="<gun-ui-led>"></prism-demo> doesn't actually use Gun, but it is used by other elements.
+      </blockquote>
+      <p>The led has 6 colors and 'off'. I needed to cycle through those colors in another project so i added the attribute <span class="attribute">cycle</span>. This attribute makes the led go through each color on every press.</p>
+     
+      <div class="bind-demo">
+       <template is="dom-bind" id="cycle-demo">
+      <div class="demo-header">
+        <blockquote>
+        Setting <span class="attribute">cycle</span> automaticly lets <prism-demo inline code="<gun-ui-ledbutton>"></prism-demo> store its <i>color</i> to Gun instead of its <i>state</i>
+      </blockquote>
+      <h3>current color : [[color]]</h3>
+      <blockquote>
+        I see a classic coming up...'mastermind'. Actually one of my upcoming GunUi tutorials
+      </blockquote>
+      </div>
+          <div class="row wood">
+            <gun-ui-ledbutton color="{{color}}" ledbutton cycle noink soul="demo" prop="colors"  subscribe ></gun-ui-ledbutton>
+            <gun-ui-ledbutton blink ledbutton cycle noink soul="demo" prop="colors"  subscribe></gun-ui-ledbutton>
+            <gun-ui-ledbutton ledbutton cycle noink soul="demo" prop="colors"  subscribe></gun-ui-ledbutton>
+            <gun-ui-ledbutton ledbutton cycle noink soul="demo" prop="colors"  subscribe></gun-ui-ledbutton>
+            <gun-ui-ledbutton ledbutton cycle noink soul="demo" prop="colors"  subscribe ></gun-ui-ledbutton>
+        </div>
+        </template>
+
+      <demo-box no-render class="binder">
+        <template>
+          <div class="row wood">
+            <gun-ui-ledbutton id="btn" color="{{color}}" ledbutton cycle noink soul="demo" prop="colors" subscribe></gun-ui-ledbutton>
+            <gun-ui-ledbutton blink ledbutton cycle noink soul="demo" prop="colors"  subscribe></gun-ui-ledbutton>
+            <gun-ui-ledbutton ledbutton cycle noink soul="demo" prop="colors"  subscribe></gun-ui-ledbutton>
+            <gun-ui-ledbutton ledbutton cycle noink soul="demo" prop="colors"  subscribe></gun-ui-ledbutton>
+            <gun-ui-ledbutton ledbutton cycle noink soul="demo" prop="colors"  subscribe color="{{color}}"></gun-ui-ledbutton>
+          </div>
+        </template>
+      </demo-box>
+
+    
+      </div>
 
 
       </gunui-demo-app>

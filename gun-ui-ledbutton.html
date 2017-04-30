@@ -23,6 +23,7 @@
         text-align: center;
         vertical-align: middle;
         margin:0;
+        box-shadow:var(--button-shadow);
         
         
       }
@@ -62,24 +63,21 @@
       }
 
       .plain{
-        box-shadow: 0px 0px 0px 1px lightgrey;
+        box-shadow: var(--button-shadow,0px 0px 0px 1px lightgrey);
         box-sizing:border-box;
         border-radius: 6px;
       }
+      .solo,
       .ledBtn {
           min-width: 100%;
           min-height: 100%;
-          padding: 0.57em 0.57em
+           border-radius: var(--button-border-radius,3px);
       }
       .ledBtn > gun-ui-led {
         margin:0;
       }
 
-      .ledBtn,
-      .solo {
-       
-        border-radius: var(--button-border-radius,3px);
-      }
+      
     </style>
 
 
@@ -90,17 +88,17 @@
     <template is="dom-if" if="{{suffix}}">
       <span hidden$="{{ledbutton}}" style="margin: 0 10px;"><slot></slot></span>
     </template>
-    <template is="dom-if" if="{{_checkLed(led,ledbutton)}}">
-      <gun-ui-led id="led" color="[[color]]" blink="[[blink]]"></gun-ui-led>
+    <template is="dom-if" if="{{_checkLed(led,ledbutton)}}" on-dom-change="_tempRendered">
+      <gun-ui-led id="led" color="[[color]]" blink="[[blink]]" ledColors="{{ledColors}}"></gun-ui-led>
     </template>
      <template is="dom-if" if="{{!suffix}}">
       <span hidden$="{{ledbutton}}" style="margin: 0 10px;"><slot></slot></span>
     </template>
   </paper-button>
 </template>
-<template is="dom-if" if="{{!_isButton(button,ledbutton,label)}}">
+<template is="dom-if" if="{{!_isButton(button,ledbutton,label)}}" >
     <div class="solo">
-       <gun-ui-led id="sololed" color="[[color]]" blink="[[blink]]"></gun-ui-led>
+       <gun-ui-led id="led" color="[[color]]" blink="[[blink]]"></gun-ui-led>
     </div>
 </template>
 
@@ -117,9 +115,10 @@
         ledbutton      : { type:Boolean, value:false    },
         label          : { type:String,  value:null     },
         led            : { type:Boolean, value:false    },
-        color          : { type:String,  value:'white'    },
+        colors         : { type:Array,value:['off','white','red','orange','yellow','green','blue']},
+        color          : { type:String,  value:'white',notify:true  },
         colorOn        : { type:String,  value:'green'  },
-        colorOff       : { type:String,  value:'null'   },
+        colorOff       : { type:String,  value:'off'    },
         colorFail      : { type:String,  value:'red'    },
         colorStandby   : { type:String,  value:'yellow' },
         activeColor    : { type:String,  value:'green'  },
@@ -133,6 +132,9 @@
         state          : { type: String, value:'off',reflectToAttribute:true, observer:'_stateChanged', notify:true},
         blink          : { type:Boolean, value:false} ,
         three           :{ type:Boolean, value:false} ,
+        four          :{ type:Boolean, value:false} ,
+        cycle       :{ type:Boolean, value:false} ,
+        ledColors   : { type:Array},
         _fromOff      :{ type:Boolean, value:false} ,
       },
       behaviors: [Polymer.GunUiMixin],
@@ -151,26 +153,34 @@
       _checkLed(led,ledbutton){
         return (led || ledbutton) ? true : false
       },
+      _tempRendered(e,detail){
+
+      },
       // inititial
       ready: function() {
         this.led = this.ledbutton ? true : this.led; 
         this.subscribe ? this._subscribe() : this._getCurrentState();
       },
       _subscribe:function(){
-        this._on({soul:this.soul,prop:this.prop},(val) => {
-          if(this.prop=='standbyPower' ) console.log(val)
+        if(this.soul && this.prop) { 
+          this._on({soul:this.soul,prop:this.prop},(val) => {
             this._fromGun=true;
-            val ? this._toggleState(val) : this._toggleState('off')
-            
-        });
-
+            if(!this.cycle){
+              val ? this._toggleState(val) : this._toggleState('off')
+            } else {
+              val ? this.setColor(val,false) : null;
+            }
+          });
+        } else {
+          console.warn('no soul or prop',this.soul,this.prop)
+        }
 
       },
       _getCurrentState:function(){
         this._read({soul:this.soul,prop:this.prop})
             .then( (value) => {
               this._fromGun = true;
-              value ? this._toggleState(value) : this._toggleState('off')
+              value ? this._toggleState(value) :  this._toggleState('off');
             })     
       },
       
@@ -194,13 +204,15 @@
 
     
       /** set led-color from javascript
-      *  will NOT be SAVED !!
       */
-      setColor: function(color) {
+      setColor: function(color,save) {
         // preserve original color
         this.restoreColor = this.color;
         this._colorOverRide = true;
         this.color = color;
+        if(save){
+          this._update({soul:this.soul,prop:this.prop,data:this.color});
+        }
       },
       /**
        * When you used 'setColor', you can restore the previous color
@@ -218,20 +230,41 @@
       _userAction: function(e) {
         e.stopPropagation();
         this._fromGun = false;
-        if(this.three){
+        if(this.cycle){ this.active= true;this._handleRotate()}
+        else{ 
+         if(this.three){
           switch(this.state){
             case 'off' : this.state = 'standby';this._fromOff=true;break;
             case 'standby' : this.state = this._fromOff ? 'on' : 'off';break;
             case 'on' : this.state='standby';this._fromOff = false;break
           }
         }
+        
         if(this.state !=='fail' && this.state !== 'standby'){
           this.state = this.active ? 'on' : 'off'; // triggers _stateChanged -> toggleState
         }
-        
+        }
         // only change active state if currentstate = 'on' or 'off'
       
         
+      },
+      /**
+       * every press changes color 
+       * have to know the available colors from gun-ui-led
+       */
+      _handleRotate(){
+        let colors = this.colors;
+        let newColor;
+ 
+        //console.log('currentColor ',this.color)
+        colors.forEach((col,i) =>{
+          if(i == colors.length-1){i=-1};
+          if(col==this.color){
+            newColor=colors[i+1]
+          }
+        })
+        this.setColor(newColor,true)
+
       },
       /**
        * observer 
@@ -243,7 +276,7 @@
       },
 
        _toggleState: function(state) {
-  
+        if(!this.cycle) {
         switch(state) {
           case 'on'      : this.active = true;
                            this.color = this.colorOn;
@@ -259,9 +292,11 @@
                          
         }
         this.state = state;
-        if(!this._fromGun && this._isButton()) {
+        if(!this._fromGun && this._isButton() && this.prop) {
+          console.log('update ',this.soul,this.prop)
          this._update({soul:this.soul,prop:this.prop,data:this.state});
         } 
+       }
       },
 
      
