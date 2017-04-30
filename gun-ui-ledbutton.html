@@ -172,14 +172,7 @@
         this._read({soul:this.soul,prop:this.prop})
             .then( (value) => {
               this._fromGun = true;
-              if(!value) {
-
-                this._toggleState('off')
-              } else {
-                this._toggleState(value)
-              }
-              
-              //
+              value ? this._toggleState(value) : this._toggleState('off')
             })     
       },
       
