@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  <script src="https://rawgit.com/amark/gun/master/gun.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>gun-ui-ledbutton</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script>
+      window.Polymer = window.Polymer || {};
+      window.Polymer.dom = 'shadow';
+      localStorage.clear()
+    </script>
+    <link rel="import" href="../../polymer/polymer.html">
+    <link rel="import" href="../../gunui-demo-app/gunui-demo-app.html">
+    <link rel="import" href="../../gunui-demo-app/demo/demo-imports.html">
+    <link rel="import" href="../gun-ui-ledbutton.html">
+    <style is="custom-style" include="demo-shared-styles">
+          :root{ }
+          body{
+            overflow:hidden;
+          }
+      
+
+
+    </style>
+  </head>
+  <body>
+  <prism-highlighter></prism-highlighter>
+    <style is="custom-style" include="demo-shared-styles">
+          
+
+    </style>
+    <gunui-demo-app>
+      <style is="custom-style">
+        .fun {
+          @apply(--layout-horizontal);
+          @apply(--layout-center-justified);
+          font-family: 'Roboto', 'Noto', sans-serif;
+          -webkit-font-smoothing: antialiased;
+            font-size: 1.17em;
+            text-transform: uppercase;
+          font-weight: 600;
+        }
+        .fun span {
+
+        }
+
+        .funinline {
+           height: 24px;
+            margin: 0px 6px;
+            display: inline-block;
+        }
+        .row gun-ui-ledbutton { margin:10px; }
+           
+        .inline {
+            --button-background:transparent;
+            height: 0;
+            margin: 12px 5px;
+            display: inline-block;
+          }
+          .strikethrough {
+            position: relative;
+          }
+          .strikethrough:before {
+            position: absolute;
+            content: "";
+            left: 0;
+            top: 50%;
+            right: 0;
+            border-top: 1px solid;
+            border-color: inherit;
+
+            -webkit-transform:rotate(-5deg);
+            -moz-transform:rotate(-5deg);
+            -ms-transform:rotate(-5deg);
+            -o-transform:rotate(-5deg);
+            transform:rotate(-5deg);
+          }
+          .attribute {
+            color: #690;
+            font-family: monospace;
+          }
+          .wood {
+            background: -moz-linear-gradient(left, #e9dfc4 0%, #e9dfc4 1%, #ede3c8 2%, #ede3c8 24%, #ebddc3 25%, #e9dfc4 48%, #ebddc3 49%, #e6d8bd 52%, #e6d8bd 53%, #e9dbc0 54%, #e6d8bd 55%, #e6d8bd 56%, #e9dbc0 57%, #e6d8bd 58%, #e6d8bd 73%, #e9dbc0 74%, #e9dbc0 98%, #ebddc3 100%);
+          background: -webkit-gradient(linear, left top, right top, color-stop(0%, #e9dfc4), color-stop(1%, #e9dfc4), color-stop(2%, #ede3c8), color-stop(24%, #ede3c8), color-stop(25%, #ebddc3), color-stop(48%, #e9dfc4), color-stop(49%, #ebddc3), color-stop(52%, #e6d8bd), color-stop(53%, #e6d8bd), color-stop(54%, #e9dbc0), color-stop(55%, #e6d8bd), color-stop(56%, #e6d8bd), color-stop(57%, #e9dbc0), color-stop(58%, #e6d8bd), color-stop(73%, #e6d8bd), color-stop(74%, #e9dbc0), color-stop(98%, #e9dbc0), color-stop(100%, #ebddc3));
+          background: -webkit-linear-gradient(left, #e9dfc4 0%, #e9dfc4 1%, #ede3c8 2%, #ede3c8 24%, #ebddc3 25%, #e9dfc4 48%, #ebddc3 49%, #e6d8bd 52%, #e6d8bd 53%, #e9dbc0 54%, #e6d8bd 55%, #e6d8bd 56%, #e9dbc0 57%, #e6d8bd 58%, #e6d8bd 73%, #e9dbc0 74%, #e9dbc0 98%, #ebddc3 100%);
+          background: -o-linear-gradient(left, #e9dfc4 0%, #e9dfc4 1%, #ede3c8 2%, #ede3c8 24%, #ebddc3 25%, #e9dfc4 48%, #ebddc3 49%, #e6d8bd 52%, #e6d8bd 53%, #e9dbc0 54%, #e6d8bd 55%, #e6d8bd 56%, #e9dbc0 57%, #e6d8bd 58%, #e6d8bd 73%, #e9dbc0 74%, #e9dbc0 98%, #ebddc3 100%);
+          background: -ms-linear-gradient(left, #e9dfc4 0%, #e9dfc4 1%, #ede3c8 2%, #ede3c8 24%, #ebddc3 25%, #e9dfc4 48%, #ebddc3 49%, #e6d8bd 52%, #e6d8bd 53%, #e9dbc0 54%, #e6d8bd 55%, #e6d8bd 56%, #e9dbc0 57%, #e6d8bd 58%, #e6d8bd 73%, #e9dbc0 74%, #e9dbc0 98%, #ebddc3 100%);
+          background: linear-gradient(to right, #e9dfc4 0%, #e9dfc4 1%, #ede3c8 2%, #ede3c8 24%, #ebddc3 25%, #e9dfc4 48%, #ebddc3 49%, #e6d8bd 52%, #e6d8bd 53%, #e9dbc0 54%, #e6d8bd 55%, #e6d8bd 56%, #e9dbc0 57%, #e6d8bd 58%, #e6d8bd 73%, #e9dbc0 74%, #e9dbc0 98%, #ebddc3 100%);
+          background-size: 120px;
+          background-repeat: repeat;
+          }
+          .wood gun-ui-ledbutton {
+            --button-background:transparant;
+            --button-border-radius:0;
+            --led-size:24px;
+            --button-shadow:none;
+            width:40px;height:40px;
+          }
+       
+          
+      </style>
+      <!-- create page -->
+        <div class="vertical-section centered" id="start">
+
+        <div class="row fun">
+          <gun-ui-ledbutton soul="demo" prop="O" subscribe button raised>What it</gun-ui-ledbutton> 
+          <span>d</span><gun-ui-ledbutton class="funinline" soul="demo" prop="O" subscribe></gun-ui-ledbutton><span>es...and h</span><gun-ui-ledbutton class="funinline" soul="demo" prop="O" subscribe></gun-ui-ledbutton><span>w</span>
+        </div>
+  
+        <p>Well... lets try it out<br>
+        Part of he title is a <prism-demo inline code="<gun-ui-ledbutton>"></prism-demo> with attribute <span class="attribute">"button"</span>, the <gun-ui-ledbutton class="inline" soul="demo" prop="O" subscribe></gun-ui-ledbutton>'s are gun-ui-booleans with the "<span class="attribute">subscibe</span>"" attribute.<br>All elements have the same "<span class="attribute">soul</span>" and "<span class="attribute">prop</span>" attributes <prism-demo inline code='<gun-ui-ledbutton soul="demo" prop="O">' lang="html"></prism-demo>.<br>If you press the 'WHAT IT' button in the title you will see the <gun-ui-ledbutton class="inline" soul="demo" prop="O"  subscribe></gun-ui-ledbutton>'s turn on/off.</p>
+
+       <blockquote>
+           The attributes <span class="attribute">soul</span> and <span class="attribute">prop</span> will link the element to a data-point.<br>
+           The attribute <span class="attribute">subscribe</span> is what makes it 'Gun-aware'
+           you can read more about it <demo-link href="?gunui#gun-awareness">here</demo-link>
+         </blockquote> 
+
+      </div>
+
+       <div class="vertical-section centered" id="types">
+        <h3>Led, button or led-button</h3>
+        <demo-box>
+        <div class="demo-header">
+          <p><prism-demo inline code="<gun-ui-ledbutton>"></prism-demo> comes in different flavors, all depending on the attributes you set.<br>
+          Examine the code to see the different attributes.</p>
+          <blockquote>
+            I know...Not much <span class="strikethrough">fun</span>  gun here. but scroll down and things get <span class="strikethrough">gunnier</span> funnier
+          </blockquote>
+        </div>
+          <template>
+          <div class="row">
+            <gun-ui-ledbutton soul="demo" prop="types"></gun-ui-ledbutton>
+            <gun-ui-ledbutton soul="demo" prop="types" ledbutton></gun-ui-ledbutton>
+            <gun-ui-ledbutton soul="demo" prop="types" button>just a button</gun-ui-ledbutton>
+            <gun-ui-ledbutton soul="demo" prop="types" button raised>raised</gun-ui-ledbutton>
+            <gun-ui-ledbutton soul="demo" prop="types" button led>with led</gun-ui-ledbutton>
+            <gun-ui-ledbutton soul="demo" prop="types" button led suffix raised>with led</gun-ui-ledbutton>
+          </div>
+          </template>
+        </demo-box>
+
+      </div>
+
+      <div class="vertical-section centered" id="sync">
+        <h3>Where does Gun come into play?</h3>
+        <p>Glad you ask...<br>
+        But in fact Gun is already 'in play'. The buttons in the previous example <i>are</i> putting there state into Gun but they are not yet fully 'Gun aware'. They don't know if there 'data-point' is changed so they only react to user actions.</p>
+        <p>Let's change that and release the full power...<br>
+        We are going to add a new attribute to the <prism-demo inline code="<gun-ui-ledbutton>"></prism-demo>s</p>
+        <demo-box>
+          <div class="demo-header">
+          <p>Adding the attribute <span class="attribute">"subscribe"</span> to any <gun-ui></gun-ui>-element makes the element react to changes on his 'data-point'...it makes the element 'Gun aware'.</p>
+          <blockquote>
+            The elements in this example are all linked to the same "<span class="attribute">soul</span>" and "<span class="attribute">prop</span>" as those in the previous example, so pressing any button in the previous example will change the ones in here. offcourse the buttons in here will react to user actions as well
+          </blockquote>
+          </div>
+          <template>
+          <div class="row">
+            <gun-ui-ledbutton subscribe soul="demo" prop="types"></gun-ui-ledbutton>
+            <gun-ui-ledbutton subscribe soul="demo" prop="types" ledbutton></gun-ui-ledbutton>
+            <gun-ui-ledbutton subscribe soul="demo" prop="types" button raised>raised</gun-ui-ledbutton>
+            <gun-ui-ledbutton subscribe soul="demo" prop="types" button led>with led</gun-ui-ledbutton>
+          </div>
+          </template>
+        </demo-box>
+
+      </div>
+
+      <div class="vertical-section centered" id="style">
+        <h3>Styling</h3>
+        <p>Offcourse you can style the buttons just like you would style any other html element, but because custom elements are build out of multiple other elements we need to style certain parts with css-variables.</p>
+        <p>led-color</p>
+
+         <demo-box>
+          <div class="demo-header">
+  
+          </div>
+          <template>
+          <style is="custom-style">
+          .black {--button-background:-webkit-radial-gradient(center, ellipse cover, rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);;}
+          .wood { --button-background:-webkit-linear-gradient(-45deg, rgba(243,226,199,1) 0%,rgba(193,158,103,1) 50%,rgba(182,141,76,1) 51%,rgba(233,212,179,1) 100%);;font-weight: 600;}
+          .metal {--button-background:linear-gradient(135deg, rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%);}
+          .round {--button-border-radius:50%;width:40px;height:40px;}
+          .big {
+            --led-size:20px;
+            --button-border-radius:25%;
+            --button-shadow:none;
+            width:60px;
+            height:60px;
+          }
+          </style>
+          <div class="row">
+            <gun-ui-ledbutton class="black round" subscribe soul="demo" prop="types" ledbutton color-off="yellow" color-on="blue"></gun-ui-ledbutton>
+            <gun-ui-ledbutton class="black round big" subscribe soul="demo" prop="types" ledbutton color-off="yellow" color-on="blue"></gun-ui-ledbutton>
+            <gun-ui-ledbutton class="wood"  subscribe soul="demo" prop="types" button raised>raised</gun-ui-ledbutton>
+            <gun-ui-ledbutton class="metal" subscribe soul="demo" prop="types" button led>with led</gun-ui-ledbutton>
+          </div>
+          </template>
+        </demo-box>
+
+      </div>
+
+      <div class="vertical-section centered" id="led-color">
+        <h3>led-color vs state</h3>
+        <p>The led-color is a different story because the led color is in relation to the state of the button...You see..the button not only has 'on' and 'off' states...they also have 'fail' and 'standby' states.<br>This is born of necessity, because the <gun-ui></gun-ui>-elements are 'Gun aware' i discovered in one of my projects that - due to other element states - my states could also be 'fail' or 'standby'...and offcourse i wanted that to be visual.</p>
+
+        <p>The funny thing is that - by nature - a button is a boolean...it goes 'on' or it goes 'off', and that is what a user can do.<br>But through either an attribute setting or through Gun/javascript the state might be changed independ of the buttons on/off status.</p>
+         <demo-box>
+          <div class="demo-header">
+            <p>Try the 'ledbuttons'...the state stays 'fail' or 'standby'...The user can't change these states because they where set 'external'.</p>
+            <p>Now press the 'reset' button and try the ledbuttons again</p>
+          </div>
+          <template>
+          <script>
+            var setFail = function() { gun.get('demo').put({power1:'fail',power2:'standby'}) }
+            var reset =  function() { gun.get('demo').put({power1:'on',power2:'on'}) }
+            setFail();
+
+           
+          </script>
+          <div class="row">
+            <gun-ui-ledbutton soul="demo" prop="power1" subscribe ledbutton ></gun-ui-ledbutton>
+            <gun-ui-ledbutton soul="demo" prop="power2" subscribe ledbutton ></gun-ui-ledbutton>
+            <button onclick="reset()">Reset</button>
+            <button onclick="setFail()">Set Fail</button>
+           
+          </div>
+          </template>
+        </demo-box>
+
+      </div>
+
+       <div class="vertical-section centered" id="led-color">
+        <h3>Three state</h3>
+        <p>In the above example the button can only be turned 'on/off' <i>if</i> the state is 'on' or 'off', but what if you need 3 states? Well then you just set the "<span class="attribute">three</span>" attribute.</p>
+        <blockquote>
+          I understand that 'fail' and 'standby' are not allways appropiate but as i mentioned..these buttons are born of necessity.
+        </blockquote>
+         <demo-box>
+          <div class="demo-header">
+            <p>The big button will go from 'off' &rArr; 'standby' &rArr; 'on' &rArr; 'standby' &rArr; 'off' <br>
+            The right button is just a 'on/off' button.</p>
+            <p>If you press the big button, the smaller one will nicely follow the 3 states ( external states remember), if you press the small button - when the big one is green or off - the big one will only be turned 'on' or 'off' ( it never receives a third state)</p>
+            <p>Now set the big button in 'standby' ( yellow ) and try the smaller one...right, it doesn't work because an 'on/off' button is not allowed to change external states.</p>
+           
+          </div>
+          <template>
+          <div class="row">
+            <gun-ui-ledbutton class="big black" noink soul="demo" prop="standbyPower" subscribe ledbutton three ></gun-ui-ledbutton>
+            <gun-ui-ledbutton class="black" noink soul="demo" prop="standbyPower" subscribe ledbutton ></gun-ui-ledbutton>
+          </div>
+          </template>
+        </demo-box>
+
+      </div>
+
+      <div class="vertical-section centered" id="led-color">
+      <h3>Cycle</h3>
+
+      <p>Another one born out of necessity...<span class="attribute">cycle</span>. Part of the gun-ui-ledbutton is a supporting element <prism-demo inline code="<gun-ui-led>"></prism-demo></p>
+      <blockquote>
+        <prism-demo inline code="<gun-ui-led>"></prism-demo> doesn't actually use Gun, but it is used by other elements.
+      </blockquote>
+      <p>The led has 6 colors and 'off'. I needed to cycle through those colors in another project so i added the attribute <span class="attribute">cycle</span>. This attribute makes the led go through each color on every press.</p>
+     
+      <div class="bind-demo">
+       <template is="dom-bind" id="cycle-demo">
+      <div class="demo-header">
+        <blockquote>
+        Setting <span class="attribute">cycle</span> automaticly lets <prism-demo inline code="<gun-ui-ledbutton>"></prism-demo> store its <i>color</i> to Gun instead of its <i>state</i>
+      </blockquote>
+      <h3>current color : [[color]]</h3>
+      <blockquote>
+        I see a classic coming up...'mastermind'. Actually one of my upcoming GunUi tutorials
+      </blockquote>
+      </div>
+          <div class="row wood">
+            <gun-ui-ledbutton color="{{color}}" ledbutton cycle noink soul="demo" prop="colors"  subscribe ></gun-ui-ledbutton>
+            <gun-ui-ledbutton blink ledbutton cycle noink soul="demo" prop="colors"  subscribe></gun-ui-ledbutton>
+            <gun-ui-ledbutton ledbutton cycle noink soul="demo" prop="colors"  subscribe></gun-ui-ledbutton>
+            <gun-ui-ledbutton ledbutton cycle noink soul="demo" prop="colors"  subscribe></gun-ui-ledbutton>
+            <gun-ui-ledbutton ledbutton cycle noink soul="demo" prop="colors"  subscribe ></gun-ui-ledbutton>
+        </div>
+        </template>
+
+      <demo-box no-render class="binder">
+        <template>
+          <div class="row wood">
+            <gun-ui-ledbutton id="btn" color="{{color}}" ledbutton cycle noink soul="demo" prop="colors" subscribe></gun-ui-ledbutton>
+            <gun-ui-ledbutton blink ledbutton cycle noink soul="demo" prop="colors"  subscribe></gun-ui-ledbutton>
+            <gun-ui-ledbutton ledbutton cycle noink soul="demo" prop="colors"  subscribe></gun-ui-ledbutton>
+            <gun-ui-ledbutton ledbutton cycle noink soul="demo" prop="colors"  subscribe></gun-ui-ledbutton>
+            <gun-ui-ledbutton ledbutton cycle noink soul="demo" prop="colors"  subscribe color="{{color}}"></gun-ui-ledbutton>
+          </div>
+        </template>
+      </demo-box>
+
+    
+      </div>
+
+
+      </gunui-demo-app>
+    </template>
+    <script>
+      var app = document.querySelector('#app');
+    </script>
+  </body>
+</html>

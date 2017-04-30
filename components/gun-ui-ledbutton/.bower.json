@@ -1,0 +1,30 @@
+{
+  "name": "gun-ui-ledbutton",
+  "main": "gun-ui-ledbutton.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "gun-ui-mixin": "Stefdv/gun-ui-mixin#master",
+    "gun-ui-led": "Stefdv/gun-ui-led#master",
+    "gunui-demo-app": "Stefdv/gunui-demo-app"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
+    "paper-drawer-panel": "PolymerElements/paper-drawer-panel#^1.0.11",
+    "paper-menu": "PolymerElements/paper-menu#^1.3.0",
+    "paper-item": "PolymerElements/paper-item#^1.2.2"
+  },
+  "homepage": "https://github.com/Stefdv/gun-ui-ledbutton",
+  "_release": "390e9fe656",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "390e9fe6562cf6f83b260590c7f45785e901037e"
+  },
+  "_source": "https://github.com/Stefdv/gun-ui-ledbutton.git",
+  "_target": "master",
+  "_originalSource": "Stefdv/gun-ui-ledbutton",
+  "_direct": true
+}

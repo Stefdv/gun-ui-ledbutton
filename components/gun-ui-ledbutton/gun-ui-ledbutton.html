@@ -1,0 +1,320 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../gun-ui-mixin/gun-ui-mixin.html">
+<link rel="import" href="../gun-ui-led/gun-ui-led.html">
+
+<!--
+`gun-ui-ledbutton`
+
+
+@demo demo/index.html 
+-->
+
+<dom-module id="gun-ui-ledbutton">
+  <template>
+    <style include="iron-flex iron-flex-alignment">
+      :host {
+        display: block;
+       
+      }
+     
+      paper-button {
+        text-align: center;
+        vertical-align: middle;
+        margin:0;
+        box-shadow:var(--button-shadow);
+        
+        
+      }
+      paper-button,
+      .solo {
+        background: var(--button-background,white);
+        border-radius: var(--button-border-radius,3px);
+      
+      }
+
+      gun-ui-led {
+        margin: 0px 0 0 0px;
+      }
+
+      .row { 
+        @apply(--layout-flex);
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        @apply(--layout-center-justified);
+      }
+
+      .label {
+        @apply(--layout-flex);
+      }
+     
+      .solo {
+        @apply(--layout-inline);
+        @apply(--layout-center-justified);
+        @apply(--layout-center);
+        position: relative;
+        box-sizing: border-box;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        z-index: 0;
+      }
+
+      .plain{
+        box-shadow: var(--button-shadow,0px 0px 0px 1px lightgrey);
+        box-sizing:border-box;
+        border-radius: 6px;
+      }
+      .solo,
+      .ledBtn {
+          min-width: 100%;
+          min-height: 100%;
+           border-radius: var(--button-border-radius,3px);
+      }
+      .ledBtn > gun-ui-led {
+        margin:0;
+      }
+
+      
+    </style>
+
+
+
+
+<template is="dom-if" if="{{_isButton(button,ledbutton)}}">
+  <paper-button noink="[[noink]]" hidden$="[[!prop]]" raised="[[raised]]" toggles active="{{active}}" on-tap="_userAction" class$="{{_getClass(ledbutton,raised)}}" disabled$="[[disabled]]">
+    <template is="dom-if" if="{{suffix}}">
+      <span hidden$="{{ledbutton}}" style="margin: 0 10px;"><slot></slot></span>
+    </template>
+    <template is="dom-if" if="{{_checkLed(led,ledbutton)}}" on-dom-change="_tempRendered">
+      <gun-ui-led id="led" color="[[color]]" blink="[[blink]]" ledColors="{{ledColors}}"></gun-ui-led>
+    </template>
+     <template is="dom-if" if="{{!suffix}}">
+      <span hidden$="{{ledbutton}}" style="margin: 0 10px;"><slot></slot></span>
+    </template>
+  </paper-button>
+</template>
+<template is="dom-if" if="{{!_isButton(button,ledbutton,label)}}" >
+    <div class="solo">
+       <gun-ui-led id="led" color="[[color]]" blink="[[blink]]"></gun-ui-led>
+    </div>
+</template>
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'gun-ui-ledbutton',
+
+      properties: {
+        active         : { type:Boolean, value:false    },
+        button         : { type:Boolean, value:false    },
+        ledbutton      : { type:Boolean, value:false    },
+        label          : { type:String,  value:null     },
+        led            : { type:Boolean, value:false    },
+        colors         : { type:Array,value:['off','white','red','orange','yellow','green','blue']},
+        color          : { type:String,  value:'white',notify:true  },
+        colorOn        : { type:String,  value:'green'  },
+        colorOff       : { type:String,  value:'off'    },
+        colorFail      : { type:String,  value:'red'    },
+        colorStandby   : { type:String,  value:'yellow' },
+        activeColor    : { type:String,  value:'green'  },
+        _color         : { type:String,  value:'orange' },
+        _colorOverRide : { type:Boolean, value:false    }, 
+        _fromGun       : { type:Boolean, value:false    },
+        suffix         : { type:Boolean, value:false    },
+        disabled       : { type:Boolean, value:false    },
+        raised         : { type:Boolean, value:false    },
+        noink          : { type:Boolean, value:false    },
+        state          : { type: String, value:'off',reflectToAttribute:true, observer:'_stateChanged', notify:true},
+        blink          : { type:Boolean, value:false} ,
+        three           :{ type:Boolean, value:false} ,
+        four          :{ type:Boolean, value:false} ,
+        cycle       :{ type:Boolean, value:false} ,
+        ledColors   : { type:Array},
+        _fromOff      :{ type:Boolean, value:false} ,
+      },
+      behaviors: [Polymer.GunUiMixin],
+
+      _getClass: function(ledbutton,raised) {
+        var clss = ledbutton ? 'ledBtn' : null;
+        clss = raised ? clss : clss + ' plain'
+        return clss
+      },
+      _isButton:function(button,ledbutton){
+        return this.button || this.ledbutton ? true :false;
+      },
+      _checkLabelOnly:function(label,button,ledbutton,led){
+        return (label && (!button && !ledbutton &&! led))
+      },
+      _checkLed(led,ledbutton){
+        return (led || ledbutton) ? true : false
+      },
+      _tempRendered(e,detail){
+
+      },
+      // inititial
+      ready: function() {
+        this.led = this.ledbutton ? true : this.led; 
+        this.subscribe ? this._subscribe() : this._getCurrentState();
+      },
+      _subscribe:function(){
+        if(this.soul && this.prop) { 
+          this._on({soul:this.soul,prop:this.prop},(val) => {
+            this._fromGun=true;
+            if(!this.cycle){
+              val ? this._toggleState(val) : this._toggleState('off')
+            } else {
+              val ? this.setColor(val,false) : null;
+            }
+          });
+        } else {
+          console.warn('no soul or prop',this.soul,this.prop)
+        }
+
+      },
+      _getCurrentState:function(){
+        this._read({soul:this.soul,prop:this.prop})
+            .then( (value) => {
+              this._fromGun = true;
+              value ? this._toggleState(value) :  this._toggleState('off');
+            })     
+      },
+      
+      /**
+       * set state from javascript
+       * 'on','off','fail','standby'
+      */
+      setState: function(state) {
+        if(state){
+          this.restoreState = this.state;
+          this._fromGun = false;
+          this.state = state; // triggers _stateChanged -> toggleState
+        }
+      },
+      /**
+        set blink from javascript
+      */
+      setBlink(){
+        this.blink = !this.blink
+      },
+
+    
+      /** set led-color from javascript
+      */
+      setColor: function(color,save) {
+        // preserve original color
+        this.restoreColor = this.color;
+        this._colorOverRide = true;
+        this.color = color;
+        if(save){
+          this._update({soul:this.soul,prop:this.prop,data:this.color});
+        }
+      },
+      /**
+       * When you used 'setColor', you can restore the previous color
+       */
+      resetColor: function() {
+        this.color = this.restoreColor ? this.restoreColor : this.color
+        this._colorOverRide = false
+      },
+      /* user pressed the button  
+        NOTE: pressing the button can only set the state to 'on' or 'off' since this is a boolean.
+        However, other states can be set through 'setState' or due to external situations
+        Pressing a 'fail' or'standby' button doesn't do anything
+      */
+
+      _userAction: function(e) {
+        e.stopPropagation();
+        this._fromGun = false;
+        if(this.cycle){ this.active= true;this._handleRotate()}
+        else{ 
+         if(this.three){
+          switch(this.state){
+            case 'off' : this.state = 'standby';this._fromOff=true;break;
+            case 'standby' : this.state = this._fromOff ? 'on' : 'off';break;
+            case 'on' : this.state='standby';this._fromOff = false;break
+          }
+        }
+        
+        if(this.state !=='fail' && this.state !== 'standby'){
+          this.state = this.active ? 'on' : 'off'; // triggers _stateChanged -> toggleState
+        }
+        }
+        // only change active state if currentstate = 'on' or 'off'
+      
+        
+      },
+      /**
+       * every press changes color 
+       * have to know the available colors from gun-ui-led
+       */
+      _handleRotate(){
+        let colors = this.colors;
+        let newColor;
+ 
+        //console.log('currentColor ',this.color)
+        colors.forEach((col,i) =>{
+          if(i == colors.length-1){i=-1};
+          if(col==this.color){
+            newColor=colors[i+1]
+          }
+        })
+        this.setColor(newColor,true)
+
+      },
+      /**
+       * observer 
+       */
+      _stateChanged: function(newState,oldState) {
+        this.restoreState = oldState;
+        this._fromGun = false;
+        this._toggleState(newState);
+      },
+
+       _toggleState: function(state) {
+        if(!this.cycle) {
+        switch(state) {
+          case 'on'      : this.active = true;
+                           this.color = this.colorOn;
+                           break;
+          case 'off'     : this.active = false;
+                           this.color = this.colorOff;
+                           break;
+          case 'fail'    : this.color = this.colorFail;
+                           break;
+          case 'standby' : this.color=this.colorStandby;
+                           break;
+          case 'restore' : this._toggleState(this.restoreState);
+                         
+        }
+        this.state = state;
+        if(!this._fromGun && this._isButton() && this.prop) {
+          console.log('update ',this.soul,this.prop)
+         this._update({soul:this.soul,prop:this.prop,data:this.state});
+        } 
+       }
+      },
+
+     
+      /**
+       * When using gun-ui-signals this will be triggered
+       */
+      _handleStateChange:function(e,detail){
+
+        if( (detail.soul === this.soul || detail.soul == this.soul)){
+          if(this.prop==detail.prop || this.prop == detail.soul + '.' + detail.prop) {
+            //console.log(detail)
+           //console.log('%s received "%s" change from %s.%s',this.soul,this.prop,detail.soul,detail.prop)
+          this._fromGun = true;
+          this._toggleState(detail.value)
+          }
+        
+        }
+      }
+    });
+  </script>
+</dom-module>
