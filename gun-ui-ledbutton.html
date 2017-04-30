@@ -157,11 +157,9 @@
         this.subscribe ? this._subscribe() : this._getCurrentState();
       },
       _subscribe:function(){
-         if(this.prop=='standbyPower' ){console.log('subscribing to standbyPower')}
-        this._on(this.soul,this.prop,(val) => {
+        this._on({soul:this.soul,prop:this.prop},(val) => {
           if(this.prop=='standbyPower' ) console.log(val)
             this._fromGun=true;
-            if(this.prop=='standbyPower' )console.log(this.prop,val)
             val ? this._toggleState(val) : this._toggleState('off')
             
         });
